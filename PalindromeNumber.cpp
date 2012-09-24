@@ -1,0 +1,26 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+
+bool isPalindrome(int x) {
+	// Start typing your C/C++ solution below
+	// DO NOT write int main() function
+	if (x < 0) return false;
+	int div = 1;
+	while (x / div >= 10) {
+		div *= 10;
+	}
+	while (x != 0) {
+		int l = x / div;
+		int r = x % 10;
+		if (l != r) return false;
+		x = (x % div) / 10;
+		div /= 100;
+	}
+	return true;
+}
+int main()
+{
+	bool isPal = isPalindrome(1860110681);
+	std::cout << isPal << std::endl;
+}
