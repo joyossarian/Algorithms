@@ -2,65 +2,50 @@ class Solution {
 public:
     int trap(int A[], int n) {
         // Start typing your C/C++ solution below
-      // DO NOT write int main() function
+        // DO NOT write int main() function
     	if (n <= 2)
     	{
     		return 0;
     	}
     	std::vector<int> peaks;
-    	for (int i = 0; i < n; ++i)
+    	if (A[0] >= A[1])
+    		peaks.push_back(0);
+    	for (int i = 1; i < n - 1; ++i)
     	{
-    		if (i == 0 && n > 1 && A[0] >= A[1])
-    		{
-    			peaks.push_back(0);
-    		}
-    		else if (i + 1 < n && (A[i] >= A[i - 1]) && A[i] >= A[i + 1])
-    		{
-    			peaks.push_back(i);
-    		}
-    		else if (i + 1 >=n && (A[i] >= A[i - 1]))
-    		{
-    			peaks.push_back(i);
-    		}
-    	}
-    
-    	std::vector<int> realPeaks;
-    	if (!peaks.empty())
-    		realPeaks.push_back(peaks[0]);
-    	for (size_t i = 1; i < peaks.size() - 1; ++i)
-    	{
-    		bool front = false;
-    		bool back = false;
-    		int peakVal = A[peaks[i]];
+    		bool noBiggerFront = true;
+    		bool noBiggerBack = true;
+    		int pVal = A[i];
     		for (size_t j = 0; j < i; ++j)
     		{
-    			if (A[peaks[j]] > peakVal)
+    			if (A[j] > pVal)
     			{
-    				front = true;
+    				noBiggerFront = false;
     				break;
     			}
     		}
-    		for (size_t j = i + 1; j < peaks.size(); ++j)
+    		for (size_t j = i + 1; j < n; ++j)
     		{
-    			if (A[peaks[j]] > peakVal)
+    			if (A[j] > pVal)
     			{
-    				back = true;
+    				noBiggerBack = false;
     				break;
     			}
     		}
-    		if (!back || !front)
+    		if (noBiggerBack || noBiggerFront)
     		{
-    			realPeaks.push_back(peaks[i]);
+    			peaks.push_back(i);
     		}
     	}
-    	if (peaks.size() > 1)
-    		realPeaks.push_back(peaks[peaks.size() - 1]);
-    
-    	int result = 0;
-    	for (int i = 0; i < (int)realPeaks.size() - 1; ++i)
+    	if (n >= 2 && A[n-1] >= A[n-2])
     	{
-    		int psi = realPeaks[i];
-    		int pse = realPeaks[i + 1];
+    		peaks.push_back(n-1);
+    	}
+    	
+    	int result = 0;
+    	for (int i = 0; i < (int)peaks.size() - 1; ++i)
+    	{
+    		int psi = peaks[i];
+    		int pse = peaks[i + 1];
     		int psHeight = A[psi];
     		int peHeight = A[pse];
     		int finalHeight = std::min(psHeight, peHeight);
@@ -75,6 +60,4 @@ public:
     	}
     	return result;
     }
-
-
 };
